@@ -1,12 +1,12 @@
 {
 	"info": {
-		"_postman_id": "4d8900b1-087c-46cd-b0e8-97b35c837792",
+		"_postman_id": "cdfe125d-8006-409d-94ef-330f80ac8df3",
 		"name": "sos2122-l07",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "get api",
+			"name": "{{HOST}}:{{PORT}}/api",
 			"event": [
 				{
 					"listen": "test",

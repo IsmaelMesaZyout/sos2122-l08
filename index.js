@@ -16,6 +16,9 @@ app.get("/api/v1/contacts", (req,res)=>{
         }
     ]);
 });
+app.get("/api", (req,res)=>{
+    res.send({ result: true });
+});
 
 app.listen(port, () => {
     console.log(`Server ready at port ${port}`);
