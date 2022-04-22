@@ -35,6 +35,7 @@
 				getContacts();
 			}); //con await esperemos a que haya conectado a la api
 	}
+	
 </script>
 <main>
 	{#await contacts}
