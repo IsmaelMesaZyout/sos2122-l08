@@ -1,46 +1,47 @@
 <script>
-	import { onMount } from "svelte";
-	import Table from "sveltestrap/src/Table.svelte";
-	import Button from "sveltestrap/src/Button.svelte";
-	
-	let contacts = [];
+    import { onMount } from 'svelte';
+	import Table from 'sveltestrap/src/Table.svelte';
+	import Button from 'sveltestrap/src/Button.svelte';
+    let contacts = [];
 	let newContact = {
 		name: "",
-		phone:"",
-		email:""
-	}
-	let loading = true;
-	onMount(getContacts);
-
-	async function getContacts(){
-		console.log("Fetching contacts....");
-		const res = await fetch("https://sos2122-imz.herokuapp.com/#/contactList"); //con await esperemos a que haya conectado a la api
-		if(res.ok){
-			const data = await res.json();
-			contacts = data;
-			console.log("Recived contacts:" + contacts.length);
-		}
-	}
-
+		phone: "",
+		email : ""
+	};
+    onMount(getContacts);
+    async function getContacts(){
+        console.log("Fetching contacts....");
+        const res = await fetch("/api/v1/contacts"); 
+        if(res.ok){
+            const data = await res.json();
+            contacts = data;
+            console.log("Received contacts: "+contacts.length);
+        }
+    }
 	async function insertContact(){
-		console.log("Inserting contacts...." +JSON.stringify(newContact));
-		const res = await fetch("/api/v1/contacts",
-			{
-				method:"POST",
-				body: JSON.stringify(newContact),
-				headers: {
-					"Content-Type": "application/json"
-				}
-			}).then(function(res){
-				getContacts();
-			}); //con await esperemos a que haya conectado a la api
+		console.log("Inserting contact: "+JSON.stringify(newContact));
+        const res = await fetch("/api/v1/contacts",
+					{
+						method: "POST",
+						body: JSON.stringify(newContact),
+						headers: {
+							"Content-Type":"application/json"
+						}
+					}).then(function (res){
+						getContacts();
+					}); 
+					
+		console.log("Done.");
 	}
-	
 </script>
+
 <main>
-	{#await contacts}
-	loading
-		{:then contacts}
+    
+{#await contacts}
+loading
+	{:then contacts}
+	
+
 	<Table bordered>
 		<thead>
 			<tr>
@@ -49,17 +50,20 @@
 				<th>Phone</th>
 				<th>Actions</th>
 			</tr>
-			
 		</thead>
 		<tbody>
 			<tr>
-				<td><input bind:value="{newContact.name}"></td>
-				<td><input bind:value="{newContact.email}"></td>
-				<td><input bind:value="{newContact.phone}"></td>
+				<td><input id="name" bind:value="{newContact.name}"></td>
+				<td><input id="email" bind:value="{newContact.email}"></td>
+				<td><input id="phone" bind:value="{newContact.phone}"></td>
 				<td><Button 
-					outline 
-					color="primary"
-					on:click="{insertContact}">insert</Button></td>
+						id="addContact"
+						outline 
+						color="primary" 
+						on:click="{insertContact}">
+					Insert
+					</Button>
+				</td>
 			</tr>
 			{#each contacts as contact}
 				<tr>
@@ -69,29 +73,7 @@
 				</tr>
 			{/each}
 		</tbody>
-		
 	</Table>
-	{/await}
+{/await}
+
 </main>
-
-<style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
-</style>
